@@ -12,10 +12,8 @@ function coord_flip!(v::VegaVisualization)
     v.axes[findfirst([z._type == "y" for z in v.axes])].title = "x"
 
     #Change mark properties
-
     v.marks[1].properties.enter.y = VegaValueRef(scale = "x", field = "x")
-
-    _offset = v.marks[1].properties.enter.width.offset
+    typeof(v.marks[1].properties.enter.width) != Void ? _offset = v.marks[1].properties.enter.width.offset : _offset = nothing
     v.marks[1].properties.enter.height = VegaValueRef(scale = "x", band = true, offset = _offset)
     v.marks[1].properties.enter.y2 = nothing
 
@@ -42,6 +40,19 @@ function coord_flip!(v::VegaVisualization)
         v.marks[1].properties.enter.x2 = nothing
         v.marks[1].properties.enter.y = VegaValueRef(scale = "x", field = "key")
         v.marks[1].scales[1].range = "height"
+    elseif v.name == "areaplot"
+        v.marks[1].properties.enter.y2 = nothing
+        v.marks[1].properties.enter.height = nothing
+        v.marks[1].properties.enter.x.field = nothing
+
+        v.marks[1].properties.enter.orient = VegaValueRef(value = "horizontal")
+
+        v.scales[1].domain.field = "x"
+        v.scales[2].domain.field = "y"
+
+        v.marks[1].properties.enter.x2 = VegaValueRef(value = 0, scale = "y")
+        v.marks[1].properties.enter.x = VegaValueRef(field = "y", scale = "y")
+        v.marks[1].properties.enter.y = VegaValueRef(field = "x", scale = "x")
     end
 
     return v

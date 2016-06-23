@@ -8,6 +8,7 @@ function areaplot(;x::AbstractVector = Int[],
     if stacked
     	v = barplot(x = x, y = y, group = group, stacked = true)
 
+      v.name = "stacked areaplot"
         #Get unique table name
         table = v.data[1].name
 
@@ -36,6 +37,8 @@ function areaplot(;x::AbstractVector = Int[],
 
 	else
         v = barplot(x = x, y = y, group = group)
+
+        v.name = "areaplot"
 
         v.marks[1]._type = "area"
         v.marks[1].properties.enter.width = nothing
